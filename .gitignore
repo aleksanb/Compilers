@@ -1,0 +1,4 @@
+*.swp
+testOutput/
+bin/
+obj/
