@@ -7,8 +7,8 @@
  * common standard extension by GCC and many others). The function is not
  * part of the C99 standard because it allocates heap memory as a
  * side-effect, so it is reimplemented here in terms of std. calls.
- */
-#define STRDUP(s) strncpy ( (char*)malloc ( strlen(s)+1 ), s, strlen(s)+1 )
+ 
+#define STRDUP(s) strncpy ( (char*)malloc ( strlen(s)+1 ), s, strlen(s)+1 )*/
 
 // These variables is located in vslc.c
 extern int arch;
@@ -26,9 +26,12 @@ void symtab_init ( void )
 
 void symtab_finalize ( void )
 {
+    // Clear all chars
     for (int i=0; i<strings_index; i++) {
         free(strings[i]);
     }
+
+    // Clear pointer array
     free(strings);
 
     strings_index = -1;
@@ -37,24 +40,21 @@ void symtab_finalize ( void )
 
 int strings_add ( char *str )
 {
-
     // Increment string pointer
     strings_index++;
 
-    /*// Allocate more memory if needed
+    // Allocate more memory if needed
     if (strings_index >= strings_size) {
         int new_strings_size = (strings_size * 3)/2 + 1;
         strings = realloc(strings, sizeof(char *) * new_strings_size);
-        //printf("Alloccing moar memories, now %d up from %d", new_strings_size, strings_size);
         strings_size = new_strings_size;
     }
 
     // Insert new string
-    strings[strings_index] = STRDUP(str);*/
+    strings[strings_index] = str;
 
     if(outputStage == 7)
-        printf("\n Meanwhile inside: %d, %s", strings_index, str);
-        printf ( stderr, "Add strings (%s), index: %d \n", str, strings_index);
+        fprintf ( stderr, "Add strings (%s), index: %d \n", str, strings_index);
 
     return strings_index;
 }
