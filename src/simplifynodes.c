@@ -3,7 +3,7 @@
 extern int outputStage; // This variable is located in vslc.c
 
 // Helper function for when we wish to simplify all child nodes
-void recurse_with_null_check( Node_t *root, int depth ) {
+void simplify_children_with_null_check( Node_t *root, int depth ) {
     for (int i=0; i<root->n_children; i++) {
         Node_t *next_node = root->children[i];
 
@@ -15,7 +15,7 @@ void recurse_with_null_check( Node_t *root, int depth ) {
 
 Node_t* simplify_default ( Node_t *root, int depth )
 {
-    recurse_with_null_check(root, depth);
+    simplify_children_with_null_check(root, depth);
     return root;
 }
 
@@ -45,7 +45,7 @@ Node_t *simplify_function ( Node_t *root, int depth )
 		fprintf ( stderr, "%*cSimplify %s \n", depth, ' ', root->nodetype.text );
 
     // Simplify all child nodes
-    recurse_with_null_check(root, depth);
+    simplify_children_with_null_check(root, depth);
 
     // Fetch data type and label nodes
     Node_t *data_type_node = root->children[0];
@@ -79,7 +79,7 @@ Node_t *simplify_class( Node_t *root, int depth )
 		fprintf ( stderr, "%*cSimplify %s \n", depth, ' ', root->nodetype.text );
 
     // Recurse children, then remove first child
-    recurse_with_null_check(root, depth);
+    simplify_children_with_null_check(root, depth);
 
     // Set label
     Node_t *label_node = root->children[0];
@@ -109,7 +109,7 @@ Node_t *simplify_declaration_statement ( Node_t *root, int depth )
 		fprintf ( stderr, "%*cSimplify %s \n", depth, ' ', root->nodetype.text );
 
     // Simplify all child nodes
-    recurse_with_null_check(root, depth);
+    simplify_children_with_null_check(root, depth);
 
     // Fetch data type and label nodes
     Node_t *n_data_type = root->children[0];
@@ -142,7 +142,7 @@ Node_t *simplify_single_child ( Node_t *root, int depth )
     }
 
     // Simplify all child nodes, even though there only is one :)
-    recurse_with_null_check(root, depth);
+    simplify_children_with_null_check(root, depth);
 
     // Bind child node
     Node_t *child = root->children[0];
@@ -160,7 +160,7 @@ Node_t *simplify_list_with_null ( Node_t *root, int depth )
 		fprintf ( stderr, "%*cSimplify %s \n", depth, ' ', root->nodetype.text );
 
     // Simplify all child nodes
-    recurse_with_null_check(root, depth);
+    simplify_children_with_null_check(root, depth);
 
     // Bind child nodes
     Node_t *left_child = root->children[0]; /* Might be another list */
@@ -206,7 +206,7 @@ Node_t *simplify_list ( Node_t *root, int depth )
 		fprintf ( stderr, "%*cSimplify %s \n", depth, ' ', root->nodetype.text );
 
     // Simplify all child nodes
-    recurse_with_null_check(root, depth);
+    simplify_children_with_null_check(root, depth);
 
     if (root->n_children > 1) { /* Somewhere in the midlle of the tree, time to concat children! */
         // Bind child nodes
@@ -242,7 +242,7 @@ Node_t *simplify_expression ( Node_t *root, int depth )
 		fprintf ( stderr, "%*cSimplify %s (%s) \n", depth, ' ', root->nodetype.text, root->expression_type.text );
 
     // Recurse over our single child! :D
-    recurse_with_null_check(root, depth);
+    simplify_children_with_null_check(root, depth);
 
     // If single child, simplify
     if (root->n_children == 1 &&
