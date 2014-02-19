@@ -22,7 +22,7 @@ int bind_constant ( node_t *root, int stackOffset)
 
     // Only enter string in table if const node type is string
 	if (root->data_type.base_type == STRING_TYPE) {
-        root->string_index = strings_add(STRDUP(root->string_const));
+        root->string_index = strings_add(root->string_const);
     }
 
     return 0;
